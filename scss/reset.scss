@@ -1,0 +1,70 @@
+/* Meyers Reset / "Public Domain" / v2.0 / 20110126 / https://meyerweb.com/eric/tools/css/reset/ */
+// Modified by Alice Bevan-McGregor to apply "theme"-appropriate defaults, where appropriate, and add menu lists.
+// Additionally modified to omit obsolete and eliminated elements such as <center>, <big>, <strike>, etc.
+
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strong, sub, sup, tt, var, b, u, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: none;
+	font: inherit;
+	font-size: 100%;
+	vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	// HTML5 display-role reset for older browsers.
+	display: block;
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	font: var(--theme-font);
+	color: var(--theme-foreground);
+	background: var(--theme-background);
+	line-height: 1.3;
+}
+
+ol, ul, menu {
+	list-style: none;
+}
+
+blockquote, q {
+	quotes: none;
+	cursor: text;  // Indicate ability to interact with as text, e.g select.
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+	content: '';
+	content: none;
+}
+
+table {
+	// Sensible default border rules for tables.
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+* {
+	font: inherit;  // By default, inherit font properties all the way up to <body>.
+	cursor: default;  // Eliminate all default mouse cursor customization.
+}
+
+a, button {
+	cursor: pointer;  // Indicate ability to click as an action.
+}
+
+input:read-only, textarea:read-only, [contenteditable]:read-only {
+	// Above selectors scoped to prevent matching the entire page.
+	cursor: not-allowed;  // Note how we're defining the _exceptional_ case, here.
+}
+
+:read-write {
+	cursor: text;  // Indicate ability to manipulate as mutable text.
+}
+
+:read-write img, :read-write input, :read-write textarea {
+	cursor: pointer;  // Images and fields aren't text, let's be careful about inline-editable ones.
+}

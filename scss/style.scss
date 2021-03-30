@@ -1,0 +1,99 @@
+/* "Theme" Variable Declarations */
+
+$theme-font: 12px/15px Verdana, sans-serif !default;
+$theme-background: #fff !default;
+$theme-foreground: #333 !default;
+$theme-space: 10px !default;
+
+
+:root {
+	// Expose our SASS variables out to CSS, and allow for overloading through inheritance.
+	--theme-font: #{$theme-font};
+	--theme-background: #{$theme-background};
+	--theme-foreground: #{$theme-foreground};
+	--theme-space: #{$theme-space};
+	--theme-link: #224;
+}
+
+@media (prefers-color-scheme: dark) {
+	// Extremely rudimentary "dark mode" support inverts foreground and background.
+	:root {
+		--theme-background: #{$theme-foreground};
+		--theme-foreground: #{$theme-background};
+		--theme-link: #449;
+	}
+}
+
+
+@import 'reset';
+
+
+// Automatically eliminate conflicting margins.
+// Specifically, margins on leading and final elements which would extend "beyond" the container.
+// Correct implementation would require the margin to be applied to the container, if intentional.
+// Alternatively, applied as padding to the container instead.
+
+:first-child {
+	margin-top: 0 !important;
+	margin-left: 0 !important;
+}
+
+:last-child {
+	margin-bottom: 0 !important;
+	margin-right: 0 !important;
+}
+
+// Add back spacing between structural elements.
+
+header + *,  // Content immediately following a header should be separated from that header.
+footer,  // All footers should be spaced away from the section they represent.
+section + section,  // Separate sections from each-other.
+* + p  // Paragraphs deserve a little space from any preceeding content.
+{ margin-top: var(--theme-space); }
+
+
+// Primary Structural Elements
+
+body > header { padding: var(--theme-space) calc(1.5*var(--theme-space)); }
+
+
+// Primary Typographical Elements
+
+h1 {
+	font-size: 36px;
+}
+
+h2 {
+	font-size: 28px;
+}
+
+
+// Active Element Styling
+
+a {
+	&:link { color: var(--theme-link); }
+	&:visited { color: var(--theme-link); }
+	&:hover { color: var(--theme-link); }
+	&:active { color: var(--theme-link); }
+}
+
+
+
+// Language-Dependent Styles
+
+:lang(en) {
+	// Apply English-style quoting.
+	q { quotes: '“' '”' '‘' '’'; }
+	
+	// Highlight other languages by not underlining the current one in navigation.
+	a.lang-en { text-decoration: none; }
+}
+
+:lang(fr) {
+	// Apply French-style quoting.
+	q { quotes: '« ' ' »'; }
+	
+	// Highlight other languages by not underlining the current one in navigation.
+	a.lang-fr { text-decoration: none; }
+}
+
