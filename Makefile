@@ -35,7 +35,8 @@ clean:
 	rm -f $(TARGETS) $(DESTINATION)/style.css
 
 help:  ## Show this help message and exit.
-	@echo "Usage: make <\033[4mtarget\033[0m|\033[4mcommand\033[0m>\nA target may be any valid destination HTML file name, a command is one of:\n\033[36m\033[0m"
+	@echo "Usage: make <\033[4mtarget\033[0m|\033[4mcommand\033[0m>"
+	@echo "A target may be any valid destination HTML file name, a command is one of:\n\033[36m\033[0m"
 	@awk 'BEGIN {FS = ":.*##"} /^[a-zA-Z_-]+:.*?##/ { printf "\033[1;36m%-18s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST) | sort
 
 watch:  ## Watch the filesystem for changes and automatically rebuild.
@@ -71,9 +72,20 @@ BOLD = \e[1m
 GREEN = \e[32m
 CEOL = \e[K
 
+YEAR = $(date +%Y)
+export YEAR
+
+MAKE_ENV := $(shell echo '$(.VARIABLES)' | awk -v RS=' ' '/^[a-zA-Z0-9]+$$/')
+SHELL_EXPORT := $(foreach v,$(MAKE_ENV),$(v)='$($(v))')
+
+test:
+	@$(SHELL_EXPORT) /bin/echo "\${YEAR}"
+
 # These form generic rules for producing one file type from the invocation of a command against another.
-%.html: %.md Makefile _prefix.html _suffix.html  ## Produce an HTML file from a Markdown one.
-	@printf "$(BOLD)$<$(NORMAL)  HTML boilerplate...$(CEOL)"
+$(DESTINATION)/%.html: $(ORIGIN)/%.md Makefile _prefix.html _suffix.html  ## Produce an HTML file from a Markdown one.
+	@printf "$(BOLD)$<$(NORMAL)  Constructing directory tree...$(CEOL)"
+	@mkdir -p $(@D)
+	@printf "\r$(BOLD)$<$(NORMAL)  HTML boilerplate...$(CEOL)"
 	@echo "<!DOCTYPE html>" > $@
 	
 	@#echo
@@ -85,9 +97,9 @@ CEOL = \e[K
 	@echo "<meta name=viewport content=\"width=device-width,initial-scale=1\">" >> $@
 	@echo "<link rel=stylesheet href=/style.css>" >> $@
 	@printf "\r$(BOLD)$<$(NORMAL)  Applying prefix...$(CEOL)"
-	@cat _prefix.html >> $@
+	@cat _prefix.html | envsubst >> $@
 	@printf "\r$(BOLD)$<$(NORMAL)  Rendering content...$(CEOL)"
-	@@$(PRODUCER) < $< >> $@
+	@$(PRODUCER) < $< | envsubst >> $@
 	@printf "\r$(BOLD)$<$(NORMAL)  Applying suffix...$(CEOL)"
-	@cat _suffix.html >> $@
+	@cat _suffix.html | envsubst >> $@
 	@printf "\r$(GREEN)$(BOLD)$@$(NORMAL)$(CEOL)\n"
