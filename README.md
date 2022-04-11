@@ -7,3 +7,5 @@
 make help
 ```
 
+![A screenshot of make help output.](https://ghcdn.webcore.io/marrow/valsi.png "The output of make help.")
+
