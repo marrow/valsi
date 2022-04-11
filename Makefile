@@ -46,8 +46,8 @@ watch:  ## Watch the filesystem for changes and automatically rebuild.
 
 # Local Testing
 
-serve: all  ## Start an HTTP server serving the current directory.
-	python3 -m http.server
+serve: all  ## Start an HTTP server serving the destination directory.
+	python3 -m http.server --directory "$(DESTINATION)"
 
 
 # Deployment Automation
